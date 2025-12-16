@@ -11,22 +11,20 @@ def solve_pnp(object_points, img_points, camera_matrix, dist_coeffs=None):
 if __name__ == "__main__":
 
     import sys
-    import img_utils.img_utils as iu
+    # import img_utils.img_utils as iu
 
-    object_points = np.array(   [[5.46, 23.745, 0],
-                                [4.115, 23.745, 0],
+    object_points = np.array(   [[5.46, 11.86, 0],
+                                [4.115, 11.86, 0],
                                 [4.115, 6.375, 0],
-                                [0, 6.375, 0],
-                                [-4.115, 6.375, 0]], dtype=np.float32)
+                                [0, 6.375, 0],], dtype=np.float32)
 
-    img_points = np.array([[21, 241],
-                             [143, 226],
-                             [471, 302],
-                             [659, 232],
-                             [741, 203]], dtype=np.float32)
+    img_points = np.array([[20, 176],
+                             [125, 162],
+                             [448, 244],
+                             [646, 175],], dtype=np.float32)
 
-    camera_matrix = np.array([  [493.63, 0, 427.5],
-                                [0, 529.13, 222],
+    camera_matrix = np.array([  [611, 0, 352.5],
+                                [0, 610, 163.5],
                                 [0, 0, 1]]
                                 , dtype=np.float32)
 
@@ -49,5 +47,10 @@ if __name__ == "__main__":
     print("Reprojection errors per point:", errors)
     print("Mean reprojection error:", mean_error)
 
-    # print(855/np.tan(np.deg2rad(60)))
-    # print(444/np.tan(np.deg2rad(40)))
+    print(3840/(2*np.pi))
+    print(705/(2*np.tan(np.deg2rad(30))))
+    print(327/(2*np.tan(np.deg2rad(15))))
+    print("\n")
+    print(1058/(2*np.tan(np.deg2rad(30))))
+    print(491/(2*np.tan(np.deg2rad(15))))
+    print(5760/(2*np.pi))
