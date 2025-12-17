@@ -13,9 +13,9 @@ if __name__ == "__main__":
     import sys
     # import img_utils.img_utils as iu
 
-    object_points = np.array(   [[5.46, 11.86, 0],
-                                [4.115, 11.86, 0],
-                                [4.115, 6.375, 0],
+    object_points = np.array(   [[-5.46, 11.86, 0],
+                                [-4.115, 11.86, 0],
+                                [-4.115, 6.375, 0],
                                 [0, 6.375, 0],], dtype=np.float32)
 
     img_points = np.array([[20, 176],
@@ -29,8 +29,10 @@ if __name__ == "__main__":
                                 , dtype=np.float32)
 
     ret, rvec, tvec = solve_pnp(object_points, img_points, camera_matrix)
+    R, _ = cv2.Rodrigues(rvec)
 
     print("Return value:", ret)
+    print("Rotation matrix:\n", R)
     print("Rotation Vector:\n", rvec)
     print("Translation Vector:\n", tvec)
 
