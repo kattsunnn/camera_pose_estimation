@@ -13,15 +13,15 @@ if __name__ == "__main__":
     import sys
     # import img_utils.img_utils as iu
 
-    object_points = np.array(   [[-5.46, 11.86, 0],
-                                [-4.115, 11.86, 0],
+    object_points = np.array(   [[-4.115, 11.86, 0],
                                 [-4.115, 6.375, 0],
-                                [0, 6.375, 0],], dtype=np.float32)
+                                [0, 6.375, 0],
+                                [4.115, 6.375, 0],], dtype=np.float32)
 
-    img_points = np.array([[20, 176],
-                             [125, 162],
-                             [448, 244],
-                             [646, 175],], dtype=np.float32)
+    img_points = np.array([ [8, 191],
+                            [627, 272],
+                            [640, 150],
+                            [644, 113],], dtype=np.float32)
 
     camera_matrix = np.array([  [611, 0, 352.5],
                                 [0, 610, 163.5],
@@ -32,8 +32,8 @@ if __name__ == "__main__":
     R, _ = cv2.Rodrigues(rvec)
 
     print("Return value:", ret)
-    print("Rotation matrix:\n", R)
     print("Rotation Vector:\n", rvec)
+    print("Rotation matrix:\n", R)
     print("Translation Vector:\n", tvec)
 
     # object_points, img_points, rvec, tvec, camera_matrix, dist_coeffs がある場合
