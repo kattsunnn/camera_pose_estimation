@@ -2,31 +2,32 @@ import sys
 import numpy as np
 import cv2
 from pathlib import Path
+import click
 import img_utils.img_utils as iu
 from camera_calibration_utils import xc_to_xw, solve_pnp
 
-world_points_path = sys.argv[1]
-img_path = sys.argv[2]
-intrinsics_path = sys.argv[3]
-output_path = sys.argv[4]
+@click.command
+@click.option('-wp', 'world_points_path', required=True, type=str, help='対応点の世界座標系のパス')
+@click.option('-in', 'intrinsics_path', required=True, type=str, help='内部パラメータのパス')
+@click.option('-im', 'img_path', required=True, type=str, help='入力画像のパス')
+@click.option('-o', 'output_path', required=True, type=str, help='推定結果の出力先パス（ファイル名を含む）')
+def main(world_points_path, img_path, intrinsics_path, output_path):
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
 
-output_path = Path(output_path)
-output_path.parent.mkdir(parents=True, exist_ok=True)
+    world_points = np.loadtxt(world_points_path, dtype=np.float32)
+    intrinsics = np.loadtxt(intrinsics_path, dtype=np.float32)
+    # GUIで対応点を取得
+    img = iu.load_imgs(img_path) 
+    img_points, _ = iu.get_img_points_with_gui(img, 2)
 
-world_points = np.loadtxt(world_points_path, dtype=np.float32)
-intrinsics = np.loadtxt(intrinsics_path, dtype=np.float32)
-# GUIで対応点を取得
-img = iu.load_imgs(img_path) 
-img_points, _ = iu.get_img_points_with_gui(img, 2)
+    ret, r_vec, t_vec = solve_pnp(world_points, img_points,  intrinsics)
+    r_mat, _ = cv2.Rodrigues(r_vec)
+    extrinsics = np.vstack((r_mat, t_vec.T))
+    np.savetxt(output_path, extrinsics)
 
-ret, r_vec, t_vec = solve_pnp(world_points, img_points,  intrinsics)
-r_mat, _ = cv2.Rodrigues(r_vec)
-# 世界座標におけるカメラの位置を計算・保存
-xc_origin_in_xw = xc_to_xw(np.zeros((3, 1)), r_mat, t_vec)
-np.savetxt(output_path, xc_origin_in_xw)
-print(xc_origin_in_xw)
-
-
+if __name__ == '__main__':
+    main()
 # print("Return value:", ret)
 # print("Rotation Vector:\n", r_vec)
 # print("Rotation matrix:\n", R)
