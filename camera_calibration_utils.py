@@ -9,9 +9,13 @@ def load_extrinsics_file(path):
     return r_mat, t_vec
 
 def xc_to_xw(xc:np.ndarray, R:np.ndarray, t:np.ndarray):
+    xc = xc.reshape(3,1)
+    t = t.reshape(3,1)
     return R.T @ ( xc - t )
 
 def xw_to_xc(xw:np.ndarray, R:np.ndarray, t:np.ndarray):
+    xc = xc.reshape(3,1)
+    t = t.reshape(3,1)
     return R @ xw + t
 
 def solve_pnp(object_points, img_points, intrinsics, dist_coeffs=None):
